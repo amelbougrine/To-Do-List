@@ -1,3 +1,4 @@
+// Manage Tasks
 $(".txt").on("keyup", function(e) {
   if (e.keyCode == 13 && $(".txt").val() != "") {
     $(".notcomp").css("display", "block");
@@ -22,3 +23,9 @@ $(".txt").on("keyup", function(e) {
     $(".txt").val("");
   }
 });
+// Time
+var dt = new Date();
+var time = dt.getHours() + " : " + dt.getMinutes();
+var date = dt.getDay() + " - " + dt.getMonth() + " - " +dt.getFullYear();
+$("#time").append(time);
+$("#date").append(date);
