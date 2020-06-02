@@ -23,9 +23,11 @@ $(".txt").on("keyup", function(e) {
     $(".txt").val("");
   }
 });
-// Time
-var dt = new Date();
-var time = dt.getHours() + " : " + dt.getMinutes();
-var date = dt.getDay() + " - " + dt.getMonth() + " - " +dt.getFullYear();
-$("#time").append(time);
-$("#date").append(date);
+// Time and Date
+setInterval(() => {
+  var dt = new Date();
+  var time = dt.getHours() + " : " + dt.getMinutes();
+  var date = dt.getDay() + " - " + dt.getMonth() + " - " +dt.getFullYear();
+  $("#time").html(time);
+  $("#date").html(date);
+}, 1000);
