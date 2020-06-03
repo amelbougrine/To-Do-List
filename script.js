@@ -31,3 +31,10 @@ setInterval(() => {
   $("#time").html(time);
   $("#date").html(date);
 }, 1000);
+// Music
+$("#play").click(() => {
+  $('#song').get(0).play();
+});
+$("#pause").click(() => {
+  $('#song').get(0).pause();
+});

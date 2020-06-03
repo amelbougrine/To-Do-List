@@ -9,17 +9,22 @@
         
     </head>
     <body>
+        <div class="top">
+            <span id="date"></span> |
+            <span id="time"></span>
+        </div>
+        <div class="music">
+            <div id="play"><i class="fas fa-play"></i></div>
+            <div id="pause"><i class="fas fa-pause"></i></div>
+            <audio id="song" src="assets/song.mp3" autoplay></audio>
+        </div>
         <div class="container">
             <input type="text" class="txt" placeholder="Add a task">
-            <div class="top">
-                <span id="date"></span> |
-                <span id="time"></span>
-            </div>
             <div class="notcomp">
-                <h4>Not Completed</h4><hr style="border-color:#242323;">
+                <h4>Not Completed</h4>
             </div>
             <div class="comp">
-                <h4>Completed</h4><hr>
+                <h4>Completed</h4>
             </div>
         </div>
         <script src="script.js"></script>
