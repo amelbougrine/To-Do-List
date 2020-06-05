@@ -1,23 +1,28 @@
 // Manage Tasks
-var notComp = [];
-var compl = [];
+
+var notComp = JSON.parse(localStorage.getItem("notComp"));
+var compl = JSON.parse(localStorage.getItem("compl"));
+var task = $("<div class='task'></div>");
+var del = $("<i class='fas fa-trash-alt'></i>");
+var check = $("<i class='fas fa-check'></i>");
+$.each(notComp, function(i, item) {
+  task.text(item.title);
+  task.append(del,check);
+  $(".notcomp").append(task);
+  task.fadeIn();
+  console.log($(".notcomp"));
+})
 $(".txt").on("keyup", function(e) {
   if (e.keyCode == 13 && $(".txt").val() != "") {
-    // Local storage notComp
-    notComp.push({
-      title: $(".txt").val()
-    });
-    localStorage.setItem("notComp", JSON.stringify(notComp));
-
     $(".notcomp").css("display", "block");
-    var task = $("<div class='task'></div>").text($(".txt").val());
-    var del = $("<i class='fas fa-trash-alt'></i>").click( function() {
+    task.text($(".txt").val());
+    del.click( function() {
       var p = $(this).parent();
       p.fadeOut(function(){
         p.remove();
       });
     });
-    var check = $("<i class='fas fa-check'></i>").click( function(){
+    check.click( function(){
       var p = $(this).parent();
       // console.log (p[0].innerText);
       p.fadeOut( function() {
@@ -35,6 +40,10 @@ $(".txt").on("keyup", function(e) {
     task.append(del,check);
     $(".notcomp").append(task);
     $(".txt").val("");
+    notComp.push({
+      title: $(".txt").val()
+    });
+    localStorage.setItem("notComp", JSON.stringify(notComp));
   }
 });
 // Time and Date
