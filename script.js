@@ -1,20 +1,25 @@
 // Manage Tasks
-
 var notComp = JSON.parse(localStorage.getItem("notComp"));
-var compl = JSON.parse(localStorage.getItem("compl"));
+var compl = JSON.parse(localStorage.getItem("Comp"));
 var task = $("<div class='task'></div>");
 var del = $("<i class='fas fa-trash-alt'></i>");
 var check = $("<i class='fas fa-check'></i>");
+// Load storage
 $.each(notComp, function(i, item) {
-  task.text(item.title);
-  task.append(del,check);
-  $(".notcomp").append(task);
-  task.fadeIn();
-  console.log($(".notcomp"));
-})
+  let t= $("<div class='task'></div>").text(item.title);
+  t.append($("<i class='fas fa-trash-alt'></i>"));
+  t.append($("<i class='fas fa-check'></i>"));
+  $(".notcomp").append(t);
+});
+$.each(compl, function(i, item) {
+  let t= $("<div class='task'></div>").text(item.title);
+  t.append($("<i class='fas fa-trash-alt'></i>"));
+  $(".comp").append(t);
+});
+
 $(".txt").on("keyup", function(e) {
   if (e.keyCode == 13 && $(".txt").val() != "") {
-    $(".notcomp").css("display", "block");
+    // $(".notcomp").css("display", "block");
     task.text($(".txt").val());
     del.click( function() {
       var p = $(this).parent();
@@ -26,7 +31,7 @@ $(".txt").on("keyup", function(e) {
       var p = $(this).parent();
       // console.log (p[0].innerText);
       p.fadeOut( function() {
-        $(".comp").css("display", "block");
+        // $(".comp").css("display", "block");
         $(".comp").append(p);
         p.fadeIn();
       });
