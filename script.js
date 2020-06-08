@@ -1,6 +1,3 @@
-// declaire variable
-
-// create task
 $( document ).ready(function() {
   // Time and Date
   setInterval(() => {
@@ -21,8 +18,11 @@ $( document ).ready(function() {
   $("#pause").click(() => {
     $('#song').get(0).pause();
   });
-  var notComp = JSON.parse(localStorage.getItem("notComp"));
-  var compl = JSON.parse(localStorage.getItem("Comp"));
+  // create task
+  var notcomp = [];
+  // JSON.parse(localStorage.getItem("notComp"));
+  var comp = [];
+  // JSON.parse(localStorage.getItem("Comp"));
   $(".txt").on("keyup", function(e) {
     if (e.keyCode == 13 && $(".txt").val() != "") {
       var task = $("<div class='task'></div>");
@@ -31,36 +31,46 @@ $( document ).ready(function() {
       task.text($(".txt").val());    
       task.append(del,check);
       $(".notcomp").append(task);
+      notcomp.push({
+        title: $(".txt").val()
+      });
+      console.log("push", $(".txt").val(), "to NComp local storage");
+      localStorage.setItem("NComp", JSON.stringify(notcomp));
       $(".txt").val("");
-      // notComp.push({
-      //   title: $(".txt").val()
-      // });
-      // console.log("push", $(".txt").val());
-      // localStorage.setItem("notComp", JSON.stringify(notComp));
+      // Manage tasks - check -
+      check.click( function(){
+        var t = $(this).parent();
+        t.fadeOut( function() {
+          $(".comp").append(t);
+          t.fadeIn();
+        });
+        $(this).remove();
+        comp.push({
+          title: t[0].innerText
+        });
+        notcomp = JSON.parse(localStorage.getItem("NComp"));
+        var index = notcomp.findIndex(x => x.title === t[0].innerText);
+        notcomp.splice(index, 1);
+        localStorage.setItem("NComp", JSON.stringify(notcomp));
+        localStorage.setItem("Comp", JSON.stringify(comp));
+      });
+      // Manage tasks - delete -
+      del.click( function() {
+        var t = $(this).parent();
+        t.fadeOut(function(){
+          t.remove();
+        });
+        if($('div.notcomp').has(t).length) {
+          var index1 = notcomp.findIndex(x => x.title === t[0].innerText);
+          notcomp.splice(index1, 1);
+          localStorage.setItem("NComp", JSON.stringify(notcomp));
+        } else {
+          var index2 = comp.findIndex(x => x.title === t[0].innerText);
+          comp.splice(index2, 1);
+          localStorage.setItem("Comp", JSON.stringify(comp));
+        }
+      });
     }
-    // Manage tasks - check -
-    check.click( function(){
-      var t = $(this).parent();
-      t.fadeOut( function() {
-        $(".comp").append(t);
-        t.fadeIn();
-        console.log(t,"to .comp");
-      });
-      $(this).remove();
-      // compl.push({
-      //   title: t[0].innerText
-      // });
-      // console.log("push", t[0].innerText);
-      // localStorage.setItem("Comp", JSON.stringify(compl));
-    });
-    // Manage tasks - delete -
-    del.click( function() {
-      var t = $(this).parent();
-      t.fadeOut(function(){
-        t.remove();
-        console.log(t,"removed");
-      });
-    });
   });
 });
 
