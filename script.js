@@ -1,4 +1,6 @@
 $( document ).ready(function() {
+  var notcomp = [];
+  var comp = [];
   // Time and Date
   setInterval(() => {
     function addZero(i) {
@@ -17,76 +19,109 @@ $( document ).ready(function() {
   });
   $("#pause").click(() => {
     $('#song').get(0).pause();
-  });
+  });  
+  // Manage tasks - delete -
+  function dele(t) {
+    console.log(t);
+    t.fadeOut(function(){
+      t.remove();
+    });
+    if($('div.notcomp').has(t).length) {
+      var index1 = notcomp.findIndex(x => x.title === t[0].innerText);
+      notcomp.splice(index1, 1);
+      localStorage.setItem("NComp", JSON.stringify(notcomp));
+    } else {
+      var index2 = comp.findIndex(x => x.title === t[0].innerText);
+      comp.splice(index2, 1);
+      localStorage.setItem("Comp", JSON.stringify(comp));
+    }
+  };
+  // Manage tasks - check -
+  function checked(t) {
+    console.log(t);
+    t.fadeOut( function() {
+      $(".comp").append(t);
+      t.fadeIn();
+    });
+    comp.push({
+      title: t[0].innerText
+    });
+    notcomp = JSON.parse(localStorage.getItem("NComp"));
+    var index = notcomp.findIndex(x => x.title === t[0].innerText);
+    notcomp.splice(index, 1);
+    localStorage.setItem("NComp", JSON.stringify(notcomp));
+    localStorage.setItem("Comp", JSON.stringify(comp));
+  };
+  // load local storage
+  if (localStorage.getItem("NComp") != null){
+    notcomp = JSON.parse(localStorage.getItem("NComp"));
+    var del = $("<i class='fas fa-trash-alt'></i>");
+    var check = $("<i class='fas fa-check'></i>");
+    $.each(notcomp, function (i) {
+      $.each(notcomp[i], function() {
+        var task = $("<div class='task'></div>");
+        var t= task.text(notcomp[i].title);
+        t.append(del);
+        t.append(check);
+        $(".notcomp").append(t);
+      });
+    });
+    // event listener
+    check.click(function() {
+      var t = $(this).parent();
+      console.log(this);
+      checked(t);
+      $(this).remove();
+    });    
+    del.click(function() { 
+      var t = $(this).parent();
+      dele(t);
+    });
+  }
+  if (localStorage.getItem("Comp") != null){
+    comp = JSON.parse(localStorage.getItem("Comp"));
+    $.each(comp, function (i) {
+      $.each(comp[i], function() {
+        var task = $("<div class='task'></div>");
+        var del = $("<i class='fas fa-trash-alt'></i>");
+        var t= task.text(comp[i].title);
+        t.append(del);
+        $(".comp").append(t);
+      });
+    }); 
+    // event listener   
+    var del = $("<i class='fas fa-trash-alt'></i>");
+    del.click(function() { 
+      var t = $(this).parent();
+      dele(t);
+    });
+  }
   // create task
-  var notcomp = [];
-  // JSON.parse(localStorage.getItem("notComp"));
-  var comp = [];
-  // JSON.parse(localStorage.getItem("Comp"));
   $(".txt").on("keyup", function(e) {
     if (e.keyCode == 13 && $(".txt").val() != "") {
-      var task = $("<div class='task'></div>");
-      var check = $("<i class='fas fa-check'></i>");
       var del = $("<i class='fas fa-trash-alt'></i>");
-      task.text($(".txt").val());    
-      task.append(del,check);
-      $(".notcomp").append(task);
+      var check = $("<i class='fas fa-check'></i>");
+      var t = $("<div class='task'></div>");
+      t.text($(".txt").val());  
+      t.append(del,check);
+      $(".notcomp").append(t);
       notcomp.push({
         title: $(".txt").val()
       });
-      console.log("push", $(".txt").val(), "to NComp local storage");
       localStorage.setItem("NComp", JSON.stringify(notcomp));
       $(".txt").val("");
-      // Manage tasks - check -
-      check.click( function(){
+      // event listener
+      check.click(function() {
         var t = $(this).parent();
-        t.fadeOut( function() {
-          $(".comp").append(t);
-          t.fadeIn();
-        });
+        console.log(this);
+        checked(t);
         $(this).remove();
-        comp.push({
-          title: t[0].innerText
-        });
-        notcomp = JSON.parse(localStorage.getItem("NComp"));
-        var index = notcomp.findIndex(x => x.title === t[0].innerText);
-        notcomp.splice(index, 1);
-        localStorage.setItem("NComp", JSON.stringify(notcomp));
-        localStorage.setItem("Comp", JSON.stringify(comp));
-      });
-      // Manage tasks - delete -
-      del.click( function() {
+      });    
+      del.click(function() { 
         var t = $(this).parent();
-        t.fadeOut(function(){
-          t.remove();
-        });
-        if($('div.notcomp').has(t).length) {
-          var index1 = notcomp.findIndex(x => x.title === t[0].innerText);
-          notcomp.splice(index1, 1);
-          localStorage.setItem("NComp", JSON.stringify(notcomp));
-        } else {
-          var index2 = comp.findIndex(x => x.title === t[0].innerText);
-          comp.splice(index2, 1);
-          localStorage.setItem("Comp", JSON.stringify(comp));
-        }
+        dele(t);
       });
-    }
+    } 
   });
+  
 });
-
-  
-  // Load storage
-  // $.each(notComp, function(i, item) {
-  //   let t= $("<div class='task'></div>").text(item.title);
-  //   t.append($("<i class='fas fa-trash-alt'></i>"));
-  //   t.append($("<i class='fas fa-check'></i>"));
-  //   $(".notcomp").append(t);
-  // });
-  // $.each(compl, function(i, item) {
-  //   let t= $("<div class='task'></div>").text(item.title);
-  //   t.append($("<i class='fas fa-trash-alt'></i>"));
-  //   $(".comp").append(t);
-  // });
-  
-  
-
