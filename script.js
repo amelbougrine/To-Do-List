@@ -20,9 +20,78 @@ $( document ).ready(function() {
   $("#pause").click(() => {
     $('#song').get(0).pause();
   });  
+  // load local storage
+  if (localStorage.getItem("NComp") != null){
+    notcomp = JSON.parse(localStorage.getItem("NComp"));
+    var del = $("<i class='fas fa-trash-alt'></i>");
+    var check = $("<i class='fas fa-check'></i>");
+    $.each(notcomp, function (i) {
+      $.each(notcomp[i], function() {
+        var t = $("<div class='task'></div>");
+        var d = $("<i class='fas fa-trash-alt'></i>");
+        var c = $("<i class='fas fa-check'></i>");
+        t.text(notcomp[i].title);
+        t.append(d, c);
+        $(".notcomp").append(t);
+        // event listener
+        c.click(function() {
+          let t = $(this).parent();
+          console.log(this);
+          checked(t);
+          $(this).remove();
+        });    
+        d.click(function() { 
+          let t = $(this).parent();
+          dele(t);
+        });
+      });
+    });    
+  }
+  if (localStorage.getItem("Comp") != null){
+    comp = JSON.parse(localStorage.getItem("Comp"));
+    $.each(comp, function (i) {
+      $.each(comp[i], function() {
+        var t = $("<div class='task'></div>");
+        var d = $("<i class='fas fa-trash-alt'></i>");
+        t.text(comp[i].title);
+        t.append(d);
+        $(".comp").append(t);
+        // event listener   
+        d.click(function() { 
+          let t = $(this).parent();
+          dele(t);
+        });
+      });
+    }); 
+  }
+  // create task
+  $(".txt").on("keyup", function(e) {
+    if (e.keyCode == 13 && $(".txt").val() != "") {
+      var t = $("<div class='task'></div>");
+      var d = $("<i class='fas fa-trash-alt'></i>");
+      var c = $("<i class='fas fa-check'></i>");
+      t.text($(".txt").val());  
+      t.append(d,c);
+      $(".notcomp").append(t);
+      notcomp.push({
+        title: $(".txt").val()
+      });
+      localStorage.setItem("NComp", JSON.stringify(notcomp));
+      $(".txt").val("");
+      // event listener
+      c.click(function() {
+        let t = $(this).parent();
+        checked(t);
+        $(this).remove();
+      });    
+      d.click(function() { 
+        let t = $(this).parent();
+        dele(t);
+      });
+    } 
+  });
   // Manage tasks - delete -
   function dele(t) {
-    console.log(t);
     t.fadeOut(function(){
       t.remove();
     });
@@ -38,7 +107,6 @@ $( document ).ready(function() {
   };
   // Manage tasks - check -
   function checked(t) {
-    console.log(t);
     t.fadeOut( function() {
       $(".comp").append(t);
       t.fadeIn();
@@ -52,76 +120,4 @@ $( document ).ready(function() {
     localStorage.setItem("NComp", JSON.stringify(notcomp));
     localStorage.setItem("Comp", JSON.stringify(comp));
   };
-  // load local storage
-  if (localStorage.getItem("NComp") != null){
-    notcomp = JSON.parse(localStorage.getItem("NComp"));
-    var del = $("<i class='fas fa-trash-alt'></i>");
-    var check = $("<i class='fas fa-check'></i>");
-    $.each(notcomp, function (i) {
-      $.each(notcomp[i], function() {
-        var task = $("<div class='task'></div>");
-        var t= task.text(notcomp[i].title);
-        t.append(del);
-        t.append(check);
-        $(".notcomp").append(t);
-      });
-    });
-    // event listener
-    check.click(function() {
-      var t = $(this).parent();
-      console.log(this);
-      checked(t);
-      $(this).remove();
-    });    
-    del.click(function() { 
-      var t = $(this).parent();
-      dele(t);
-    });
-  }
-  if (localStorage.getItem("Comp") != null){
-    comp = JSON.parse(localStorage.getItem("Comp"));
-    $.each(comp, function (i) {
-      $.each(comp[i], function() {
-        var task = $("<div class='task'></div>");
-        var del = $("<i class='fas fa-trash-alt'></i>");
-        var t= task.text(comp[i].title);
-        t.append(del);
-        $(".comp").append(t);
-      });
-    }); 
-    // event listener   
-    var del = $("<i class='fas fa-trash-alt'></i>");
-    del.click(function() { 
-      var t = $(this).parent();
-      dele(t);
-    });
-  }
-  // create task
-  $(".txt").on("keyup", function(e) {
-    if (e.keyCode == 13 && $(".txt").val() != "") {
-      var del = $("<i class='fas fa-trash-alt'></i>");
-      var check = $("<i class='fas fa-check'></i>");
-      var t = $("<div class='task'></div>");
-      t.text($(".txt").val());  
-      t.append(del,check);
-      $(".notcomp").append(t);
-      notcomp.push({
-        title: $(".txt").val()
-      });
-      localStorage.setItem("NComp", JSON.stringify(notcomp));
-      $(".txt").val("");
-      // event listener
-      check.click(function() {
-        var t = $(this).parent();
-        console.log(this);
-        checked(t);
-        $(this).remove();
-      });    
-      del.click(function() { 
-        var t = $(this).parent();
-        dele(t);
-      });
-    } 
-  });
-  
 });
