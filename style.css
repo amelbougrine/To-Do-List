@@ -27,7 +27,7 @@ body{
     outline: none;
     font-size: 18px;
     color: #f5f5f5;
-    margin: 20px auto;
+    margin: 40px auto;
 }
 .txt::placeholder {
     color: #f5f5f5;
@@ -91,4 +91,7 @@ h4{
 }
 #pause {
     border-bottom-right-radius: 10px;
+}
+.notcomp, .comp {
+    display: none;
 }

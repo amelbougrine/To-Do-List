@@ -21,10 +21,9 @@ $( document ).ready(function() {
     $('#song').get(0).pause();
   });  
   // load local storage
-  if (localStorage.getItem("NComp") != null){
+  if (localStorage.getItem("NComp") !== "[]" && localStorage.getItem("NComp") !== null) {
     notcomp = JSON.parse(localStorage.getItem("NComp"));
-    var del = $("<i class='fas fa-trash-alt'></i>");
-    var check = $("<i class='fas fa-check'></i>");
+    $(".notcomp").css("display", "block");
     $.each(notcomp, function (i) {
       $.each(notcomp[i], function() {
         var t = $("<div class='task'></div>");
@@ -36,7 +35,6 @@ $( document ).ready(function() {
         // event listener
         c.click(function() {
           let t = $(this).parent();
-          console.log(this);
           checked(t);
           $(this).remove();
         });    
@@ -47,8 +45,9 @@ $( document ).ready(function() {
       });
     });    
   }
-  if (localStorage.getItem("Comp") != null){
+  if (localStorage.getItem("Comp") !== "[]" && localStorage.getItem("Comp") !== null){
     comp = JSON.parse(localStorage.getItem("Comp"));
+    $(".comp").css("display", "block");
     $.each(comp, function (i) {
       $.each(comp[i], function() {
         var t = $("<div class='task'></div>");
@@ -70,6 +69,7 @@ $( document ).ready(function() {
       var t = $("<div class='task'></div>");
       var d = $("<i class='fas fa-trash-alt'></i>");
       var c = $("<i class='fas fa-check'></i>");
+      $(".notcomp").css("display", "block");
       t.text($(".txt").val());  
       t.append(d,c);
       $(".notcomp").append(t);
@@ -104,10 +104,17 @@ $( document ).ready(function() {
       comp.splice(index2, 1);
       localStorage.setItem("Comp", JSON.stringify(comp));
     }
+    if (notcomp.length === 0) {
+      $(".notcomp").css("display", "none");
+    }
+    if (comp.length === 0) {
+      $(".comp").css("display", "none");
+    }
   };
   // Manage tasks - check -
   function checked(t) {
     t.fadeOut( function() {
+      $(".comp").css("display", "block");
       $(".comp").append(t);
       t.fadeIn();
     });
@@ -119,5 +126,8 @@ $( document ).ready(function() {
     notcomp.splice(index, 1);
     localStorage.setItem("NComp", JSON.stringify(notcomp));
     localStorage.setItem("Comp", JSON.stringify(comp));
+    if (notcomp.length === 0) {
+      $(".notcomp").css("display", "none");
+    }
   };
 });
